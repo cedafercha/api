@@ -1,16 +1,16 @@
 <?php
 
 namespace App;
-use App\TipoDocumento;
+
 
 use Illuminate\Database\Eloquent\Model;
 
-class Persona extends Model
+class TipoDocumento extends Model
 {
-    /**
+     /**
      * Para especificar el nombre de la tabla
      */
-    protected $table = 'personas';
+    protected $table = 'tipos_documentos';
     /**
      * Para especificar nombre del campo primary key
      */
@@ -22,9 +22,7 @@ class Persona extends Model
     /**
      * Para esconder las columnas de created_at y updated_at
      */
-    protected $hidden = ['created_at', 'updated_at', 'tipo_documento_id'];
+    protected $hidden = ['created_at', 'updated_at'];
 
-    public function tipo_documento(){
-        return $this->belongsTo(TipoDocumento::class, 'tipo_documento_id', 'id');
-    }
+
 }

@@ -14,7 +14,9 @@ class PersonaController extends Controller
      */
     public function index()
     {
-        $personas = Persona::all();
+        //$personas = Persona::all();
+
+        $personas = Persona::with('tipo_documento')->get();
 
         return $personas;
     }
@@ -33,11 +35,25 @@ class PersonaController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return succes
      */
-    public function store(Request $request)
+    public static function store(Request $request, $id = null)
     {
-        //
+        if(is_null($id)){
+            $persona = new Persona();
+            $mensaje = 'Personsa agregada esitosamente!';
+          }else{
+            $persona = Persona::findOrFail($id);
+            $mensaje = 'Personsa actualizada esitosamente!';
+          }
+
+          $persona->nombre = $request->nombre;
+          $persona->apellido = $request->apellido;
+          $persona->edad = $request->edad;
+          $persona->correo = $request->correo;
+          $persona->save();
+
+          return $mensaje;
     }
 
     /**
@@ -46,9 +62,10 @@ class PersonaController extends Controller
      * @param  \App\Persona  $persona
      * @return \Illuminate\Http\Response
      */
-    public function show(Persona $persona)
+    public function show($id)
     {
-        //
+        $persona = Persona::with('tipo_documento')->findOrFail($id);
+        return $persona->tipo_documento->nombre;
     }
 
     /**
@@ -66,22 +83,26 @@ class PersonaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Persona  $persona
-     * @return \Illuminate\Http\Response
+     * @param  mixed|null $id
+     * @return succes
      */
-    public function update(Request $request, Persona $persona)
+    public function update(Request $request, $id)
     {
-        //
+        return self::store($request, $id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Persona  $persona
+     * @param  mixed|null $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Persona $persona)
+    public function destroy($id)
     {
         //
+        $persona = Persona::findOrFail($id);
+        $persona->delete();
+        return 'se fue el hpta';
     }
 }
