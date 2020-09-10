@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use App\TipoDocumento;
 use Illuminate\Database\Eloquent\Model;
 
 class Persona extends Model
@@ -14,4 +14,8 @@ class Persona extends Model
     public $timestamps='true';
 
     protected $hidden = ['created_at','updated_at'];
+    
+    public function  tipo_documento(){
+        return $this->belongsTo(TipoDocumento::class,'tipo_documento_id','id');
+    }
 }

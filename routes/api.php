@@ -19,3 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('personas','PersonaController@index');
+Route::get('personas/{id}','PersonaController@show');
+Route::post('personas','PersonaController@store');
+Route::put('personas/{id}','PersonaController@update');
+Route::delete('personas/{id}','PersonaController@destroy');

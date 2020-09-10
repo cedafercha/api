@@ -15,7 +15,7 @@ class PersonaController extends Controller
     public function index()
     {
         //
-        $personas = Persona::all();
+        $personas = Persona::with('Tipo_documento')->get();
 
         return $personas;
     }
@@ -36,20 +36,34 @@ class PersonaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public static function store(Request $request, $id = null)
     {
-        //
-    }
+        if(is_null($id)){
+            $persona = new Persona();
+            $mensaje='peronsa agregada';
+          }else{
+            $persona = Persona::findOrFail($id);
+            $mensaje='persona actualizada';
+          }
 
+          $persona->nombre = $request->nombre;
+          $persona->apellido = $request->apellido;
+          $persona->edad = $request->edad;
+          $persona->correo = $request->correo;
+          $persona->save();
+
+          return $mensaje;
+    }
     /**
      * Display the specified resource.
      *
      * @param  \App\Persona  $persona
      * @return \Illuminate\Http\Response
      */
-    public function show(Persona $persona)
+    public function show($id)
     {
-        //
+        $persona = Persona::with('Tipo_documento')->findOrFail($id);
+        return $persona->tipo_documento->nombre;
     }
 
     /**
@@ -69,10 +83,12 @@ class PersonaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Persona  $persona
      * @return \Illuminate\Http\Response
+     * 
      */
-    public function update(Request $request, Persona $persona)
+    public function update(Request $request,$id)
     {
         //
+        return self::store($request,$id);
     }
 
     /**
@@ -81,8 +97,11 @@ class PersonaController extends Controller
      * @param  \App\Persona  $persona
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Persona $persona)
+    public function destroy($id)
     {
         //
+        $persona = Persona::findOrFail($id);
+        $persona->delete();
+        return 'se fue el hpta'; 
     }
 }
